@@ -2,12 +2,13 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use App\Service;
-use App\Request;
+use App\ServiceRequest;
 use App\Like;
 use App\Report;
 
@@ -44,15 +45,15 @@ class User extends Authenticatable
 
     // ★ リレーション定義 ★
     public function services() {
-        return $this->hasMany(\App\Models\Service::class);
+        return $this->hasMany(Service::class);
     }
     public function requests() {
-        return $this->hasMany(\App\Models\Request::class);
+        return $this->hasMany(ServiceRequest::class);
     }
     public function likes() {
-        return $this->hasMany(\App\Models\Like::class);
+        return $this->hasMany(Like::class);
     }
     public function reports() {
-        return $this->hasMany(\App\Models\Report::class);
+        return $this->hasMany(Report::class);
     }
 }

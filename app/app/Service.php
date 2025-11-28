@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 use App\User;
-use App\Request;
+use App\ServiceRequest;
 use App\Like;
 use App\Report;
 
@@ -21,7 +21,7 @@ class Service extends Model
         return $this->belongsTo(User::class);
     }
     public function requests() {
-        return $this->hasMany(Request::class);
+        return $this->hasMany(ServiceRequest::class);
     }
     public function likes() {
         return $this->hasMany(Like::class);

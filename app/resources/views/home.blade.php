@@ -15,6 +15,14 @@
         </div>
     </div>
 
+    {{-- 詳細リンクボタン --}}
+    @guest
+    @else
+    <a href="{{ route('services.create') }}" class="btn btn-primary btn-block mt-3">
+        新規投稿
+    </a>
+    @endguest
+
     {{-- ★ 投稿カードリスト ★ --}}
     @if ($services->isEmpty())
         <p class="text-center text-muted h5">現在、投稿はありません。</p>

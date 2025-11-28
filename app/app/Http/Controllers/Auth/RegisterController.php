@@ -3,36 +3,24 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
     /**
-     * Where to redirect users after registration.
-     *
+     * 登録後のリダイレクト先URI
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/home';
 
     /**
-     * Create a new controller instance.
+     * 新しいコントローラーインスタンスを作成します。
      *
      * @return void
      */
@@ -42,7 +30,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * Get a validator for an incoming registration request.
+     * 受信した登録リクエストのデータに対するバリデーターを取得します。
      *
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
@@ -53,21 +41,33 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            // ★変更: iconをimageカラム名に変更★
+            'image' => ['nullable', 'image', 'max:2048'], // 任意、画像ファイル、最大2MB
         ]);
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * ユーザーモデルを作成した後、インカミング登録リクエストを処理します。
      *
      * @param  array  $data
-     * @return \App\User
+     * @return \App\Models\User
      */
     protected function create(array $data)
     {
+        $iconPath = null; // アイコンパスを初期化
+
+        // ★変更: imageフィールドのファイル処理に変更★
+        if (isset($data['image'])) {
+            // ファイルを 'public/images' ディレクトリに保存
+            // サービス画像とユーザーアイコンが混在するが、DBカラム名に合わせる
+            $iconPath = $data['image']->store('images', 'public');
+        }
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'image' => $iconPath, // ★変更: imageカラムにファイルパスをDBに保存
         ]);
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Service;
 
-class Request extends Model
+class ServiceRequest extends Model
 {
 
     protected $fillable = [
