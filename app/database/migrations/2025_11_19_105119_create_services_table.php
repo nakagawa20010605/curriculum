@@ -15,9 +15,13 @@ class CreateServicesTable extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->bigIncrements('id');
-            // FK
-            $table->unsignedBigInteger('user_id'); // 外部キーとして使用するカラムを定義
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // 外部キー制約を設定
+            // FK: users.id の型 (INT) に合わせるため、integer()->unsigned() を使用
+            $table->integer('user_id')->unsigned(); 
+            // 外部キー制約の定義
+            $table->foreign('user_id')
+                  ->references('id')->on('users')
+                  ->onDelete('cascade'); 
+
             
             $table->string('title', 100);
             $table->integer('amount');

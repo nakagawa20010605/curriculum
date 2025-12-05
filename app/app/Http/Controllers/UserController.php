@@ -23,10 +23,10 @@ class UserController extends Controller
         // リレーション名が 'services' であることを前提に投稿を取得
         $services = $user->services()->get();
 
-        return view('users.show', [
-            'user' => $user,
-            'services' => $services,
-        ]);
+        // いいね一覧
+        $likedServices = $user->likedServices()->with('user')->latest()->get();
+
+        return view('users.show', compact('user', 'services', 'likedServices'));
     }
 
     /**

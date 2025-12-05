@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateUsersTable extends Migration
 {
@@ -14,29 +14,40 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            
-            // 既存カラムの修正・確認
-            $table->string('name', 20); // VARCHAR(20)
-            $table->string('email', 50)->unique(); // VARCHAR(50)
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password', 100); // VARCHAR(100)
-            $table->rememberToken(); // ログイン維持用トークン
+            // #1 ID (PK, INT, AUTO_INCREMENT)
+            $table->increments('id');
 
-            // 設計書に基づいて追加するカラム
-            $table->string('image')->nullable(); // ユーザーアイコン
-            Schema::create('users', function (Blueprint $table) {
-                // 既存の他のカラム...
-                $table->string('image')->nullable()->after('password')->comment('ユーザーアイコンのファイルパス'); // この行があるか確認
-                // 既存の他のカラム...
-            });
+            // #2 name (VARCHAR(20), Unique)
+            $table->string('name', 20)->unique();
             
-            $table->tinyInteger('role')->default(0)->comment('一般=0/管理=1'); // ユーザー区分
-            $table->tinyInteger('del_flg')->default(0)->comment('表示=0/削除=1'); // 削除フラグ
-            $table->tinyInteger('stop_flg')->default(0)->comment('表示=0/利用停止=1'); // 利用停止フラグ
+            // #3 email (VARCHAR(50), Unique)
+            $table->string('email', 50)->unique();
+            
+            // #4 password (VARCHAR(100), NotNull)
+            $table->string('password', 100);
+            
+            // #5 remember_token (VARCHAR(100))
+            $table->rememberToken();
 
-            // タイムスタンプ
-            $table->timestamps();
+            // #6 image (VARCHAR)
+            $table->string('image')->nullable();
+            
+            // #7 role (tinyint, NotNull, Default 0)
+            // 0: 一般 / 1: 管理
+            $table->tinyInteger('role')->default(0)->index();
+            
+            // #8 del_flg (tinyint, NotNull, Default 0)
+            // 削除フラグ（ユーザー用） 0: 表示 / 1: 削除
+            $table->tinyInteger('del_flg')->default(0);
+
+            // #9 stop_flg (tinyint, NotNull, Default 0)
+            // 削除フラグ（管理者用） 0: 表示 / 1: 利用停止
+            $table->tinyInteger('stop_flg')->default(0);
+            
+            // #10 created_at & #11 updated_at (date型)
+            // 通常はtimestamps()ですが、設計書に合わせてdate型を明示
+            $table->date('created_at')->nullable();
+            $table->date('updated_at')->nullable();
         });
     }
 

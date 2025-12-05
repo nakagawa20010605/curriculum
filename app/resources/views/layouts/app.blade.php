@@ -1,5 +1,4 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,6 +10,10 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    
+    <!-- ここに like.js を追加します -->
+    <script src="{{ asset('js/like.js') }}" defer></script> 
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJd4sP7xMhQ/9yJIW5T4wW7sX92O/NlXJt8nJq8Q+q8k7Z/jA/p8h7l/gA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Fonts -->

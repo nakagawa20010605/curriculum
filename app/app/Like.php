@@ -4,22 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\User;
-use App\Service;
-
 class Like extends Model
 {
+    protected $fillable = ['user_id', 'service_id'];
 
-    public $timestamps = false;
-    
-    protected $fillable = [
-        'user_id', 'service_id',
-    ];
-
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function service() {
+
+    public function service()
+    {
         return $this->belongsTo(Service::class);
     }
 }

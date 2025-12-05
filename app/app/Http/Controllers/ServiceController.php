@@ -15,16 +15,24 @@ class ServiceController extends Controller
         return view('home', compact('services'));
     }
 
-    public function show(Service $service)
-    {
-        // ステータス3（削除済）の投稿は、ユーザーからは見えないように404を返す
-        if ($service->status === 3) {
-            abort(404);
-        }
-        
-        // 詳細ビュー（resources/views/services/show.blade.php）にデータを渡す
-        return view('services.show', compact('service'));
+    public function show(Service $service){
+        // ステータス3（削除済）は表示しない
+    if ($service->status === 3) {
+        abort(404);
     }
+
+    $userId = Auth::id();
+
+    // ログインしている場合のみ判定
+    $isLiked = $userId 
+        ? $service->likes()->where('user_id', $userId)->exists()
+        : false;
+
+    // いいね数
+    $likeCount = $service->likes()->count();
+    return view('services.show', compact('service', 'isLiked', 'likeCount'));
+    }
+    
 
     public function create()
     {
